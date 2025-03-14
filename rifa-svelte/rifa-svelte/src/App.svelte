@@ -1,6 +1,19 @@
 <script>
-  import OneOnOne from "./OneOnOne.svelte";
   import InputFinalists from "./InputFinalists.svelte";
+  import Bracket from "./Bracket.svelte";
+
 </script>
 
-<InputFinalists />
+<svelte:head>
+  <style>
+    html, body, #app {
+      height: 100vh;
+      margin: 0;
+    }
+  </style>
+</svelte:head>
+
+<div id="app">
+  <InputFinalists />
+  <Bracket />
+</div>
