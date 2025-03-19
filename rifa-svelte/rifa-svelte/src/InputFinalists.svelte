@@ -1,10 +1,18 @@
 <script>
-  // let finalists = $state(['', '', '', '', '', '', '', '']);
+  import { onMount } from "svelte";
   import { finalists, eventBus } from "./sharedState.svelte";
   let available_positions = $state([0,1,2,3,4,5,6,7]);
   let nombre = $state("");
   let error = $state("");
-  $inspect(finalists)
+  let startMouseX = $state(null);
+  let startMouseY = $state(null);
+  let tracking = $state(false);
+  let trackingMouseX = $state(0);
+  let trackingMouseY = $state(0);
+  let topDiff = $state();
+  let leftDiff = $state();
+  $inspect(topDiff);
+  $inspect(leftDiff);
 
   function distributeFinalists(nombre) {
     if (checkDouble(nombre) === true) {
@@ -22,7 +30,6 @@
     available_positions = new_ap;
 
     finalists[ind] = nombre;
-    $state.snapshot(finalists)
 
     eventBus.set({ind: ind, nombre: nombre});
   }
@@ -34,6 +41,38 @@
       }
     }
     return false;
+  }
+
+  let form;
+  onMount(() => {
+    console.log(form.getBoundingClientRect().top);
+  });
+
+  function setStart(event) {
+    startMouseX = event.clientX;
+    startMouseY = event.clientY;
+    leftDiff = startMouseX - form.getBoundingClientRect().left;
+    topDiff = startMouseY - form.getBoundingClientRect().top;
+    tracking = true;
+
+    window.addEventListener('mousemove', drag);
+    window.addEventListener('mouseup', drop);
+  }
+
+  function drag(event) {
+    if (tracking === true) {
+      trackingMouseX = event.clientX
+      trackingMouseY = event.clientY
+      form.style.left = (trackingMouseX - leftDiff).toString() + "px"
+      form.style.top = (trackingMouseY - topDiff).toString() + "px"
+    }
+  }
+
+  function drop(event) {
+    tracking = false;
+
+    window.removeEventListener("mousemove", drag);
+    window.removeEventListener("mouseup", drop);
   }
 
 </script>
@@ -61,6 +100,10 @@
     background-color: white;
   }
 
+  .form:hover {
+    cursor: pointer;
+  }
+
   .form-label {
     margin-bottom: 0.5rem;
   }
@@ -81,7 +124,13 @@
 </style>
 
 <div class="input-finalists">
-  <form class="form">
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <form
+    bind:this={form}
+    class="form"
+    onmousedown={setStart}
+    onmousemove={drag}
+    onmouseup={drop}>
     <label
       for="finalista"
       class="form-label">
@@ -100,8 +149,4 @@
         Ingresar
     </button>
   </form>
-  <!-- {#each finalists as finalist}
-    <p>{finalist}</p>
-  {/each}
-  <p>{error}</p> -->
 </div>
