@@ -2,11 +2,11 @@
   let {position} = $props();
   import { finalists, eventBus } from "./sharedState.svelte";
   let nombre = $state(finalists[position]);
-  $state.snapshot(nombre);
 
   eventBus.subscribe((value) => {
     if (value.ind === position) {
       nombre = value.nombre;
+      $state.snapshot(nombre);
     }
   })
 </script>
