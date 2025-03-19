@@ -1,7 +1,7 @@
 <script>
   import InputFinalists from "./InputFinalists.svelte";
   import Bracket from "./Bracket.svelte";
-
+  import GlassPanel from "./GlassPanel.svelte"
 </script>
 
 <svelte:head>
@@ -15,5 +15,6 @@
 
 <div id="app">
   <InputFinalists />
+  <GlassPanel />
   <Bracket />
 </div>

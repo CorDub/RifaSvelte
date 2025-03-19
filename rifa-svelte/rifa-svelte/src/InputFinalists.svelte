@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from "svelte";
   import { finalists, eventBus } from "./sharedState.svelte";
   let available_positions = $state([0,1,2,3,4,5,6,7]);
   let nombre = $state("");
@@ -11,8 +10,6 @@
   let trackingMouseY = $state(0);
   let topDiff = $state();
   let leftDiff = $state();
-  $inspect(topDiff);
-  $inspect(leftDiff);
 
   function distributeFinalists(nombre) {
     if (checkDouble(nombre) === true) {
@@ -44,9 +41,6 @@
   }
 
   let form;
-  onMount(() => {
-    console.log(form.getBoundingClientRect().top);
-  });
 
   function setStart(event) {
     startMouseX = event.clientX;
@@ -84,7 +78,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     background-color: transparent;
   }
